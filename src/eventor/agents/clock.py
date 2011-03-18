@@ -6,8 +6,8 @@
     @author: jldupont
 '''
 from Queue import Queue
-from jld_scripts.system import mswitch
-from jld_scripts.system.base import process_queues, message_processor
+from eventor.system import mswitch
+from eventor.system.base import process_queues, message_processor
 
 __all__=["Clock"]
 

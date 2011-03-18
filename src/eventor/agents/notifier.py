@@ -21,7 +21,7 @@ try:
 except:
     pass
 
-from jld_scripts.system.base import AgentThreadedBase
+from eventor.system.base import AgentThreadedBase
 
 __all__=["NotifierAgent", "notify"]
 
