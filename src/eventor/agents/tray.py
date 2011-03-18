@@ -9,7 +9,7 @@ __all__=["TrayAgent"]
 import os
 import gtk #@UnusedImport
 import gtk.gdk
-import app.system.mswitch as mswitch
+import eventor.system.mswitch as mswitch
 
 class AppPopupMenu:
     def __init__(self, app):

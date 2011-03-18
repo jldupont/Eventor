@@ -19,7 +19,7 @@ clean:
 install:
 	@install -d $(DESTDIR)$/$(PKG)
 	@install -d $(DESTDIR)$/$(PKG)/agents
-	@install -d $(DESTDIR)$/$(PKG)/helpers
+	#@install -d $(DESTDIR)$/$(PKG)/helpers
 	@install -d $(DESTDIR)$/$(PKG)/system
 	
 	## REQUIRED FOR CREATING THE .DEB PACKAGE
@@ -30,7 +30,7 @@ install:
 	
 	@install -D $(CURDIR)/$(PKG)/*.py                  $(DESTDIR)$/$(BASE)/$(PKG)/
 	@install -D $(CURDIR)/$(PKG)/agents/*.py           $(DESTDIR)$/$(BASE)/$(PKG)/agents
-	@install -D $(CURDIR)/$(PKG)/helpers/*.py          $(DESTDIR)$/$(BASE)/$(PKG)/helpers
+	#@install -D $(CURDIR)/$(PKG)/helpers/*.py          $(DESTDIR)$/$(BASE)/$(PKG)/helpers
 	@install -D $(CURDIR)/$(PKG)/system/*.py           $(DESTDIR)$/$(BASE)/$(PKG)/system
 	
 

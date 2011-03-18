@@ -1,119 +1,92 @@
 """
-    DBus Agent
+    MediaKeys Dbus Agent
     
-    Messages Emitted:
-    - "track?"
+    Messages Generated:
+    - "mk_key_press" (key, source, priority)
+        priority: 1 -> low, 5 -> high
     
-    Messages Processed:
-    - "track"
-
+    Created on 2010-10-22
     @author: jldupont
-    @date: May 28, 2010
 """
 import dbus.service
     
-from app.system.base import AgentThreadedBase
-from app.system import mswitch
+from jld_scripts.system.base import AgentThreadedBase
+from jld_scripts.system import mswitch
 
 __all__=[]
 
 
-class SignalRx(dbus.service.Object):
+class MKSignalRx1(dbus.service.Object):
+    """ works under ubuntu < 10.10
     """
-    DBus signals for the /Player path
+    PATH=None
+    
+    def __init__(self, agent):
+        dbus.service.Object.__init__(self, dbus.SystemBus(), self.PATH) ## not sure we need this just to receive signals...
+        self.agent=agent
+        
+        dbus.SystemBus().add_signal_receiver(self.sCondition,
+                                       signal_name="Condition",
+                                       dbus_interface="org.freedesktop.Hal.Device",
+                                       bus_name=None,
+                                       path=None
+                                       )            
+    def sCondition(self, *p):
+        """
+        DBus signal handler
+        """
+        if len(p) == 2:
+            if (p[0]=="ButtonPressed"):
+                mswitch.publish(self.agent, "mk_key_press", p[1], "source1", 5)
+
+class MKSignalRx2(dbus.service.Object):
+    """ works on ubuntu >= 10.10
     """
-    PATH="/Tracks"
+    PATH=None #"/org/gnome/SettingsDaemon/MediaKeys"
+    
+    def __init__(self, agent):
+        dbus.service.Object.__init__(self, dbus.SessionBus(), self.PATH) ## not sure we need this just to receive signals...
+        self.agent=agent
+        
+        dbus.SessionBus().add_signal_receiver(self.sCondition,
+                                       signal_name="MediaPlayerKeyPressed",
+                                       dbus_interface="org.gnome.SettingsDaemon.MediaKeys",
+                                       bus_name=None,
+                                       path="/org/gnome/SettingsDaemon/MediaKeys"
+                                       )            
+    def sCondition(self, *p):
+        """
+        DBus signal handler
+        """
+        if len(p) == 2:
+            mswitch.publish(self.agent, "mk_key_press", p[1].lower(), "source2", 1)
+
+
+class TrackSignalTx(dbus.service.Object):
+
+    PATH="/Track"
     
     def __init__(self, agent):
         dbus.service.Object.__init__(self, dbus.SessionBus(), self.PATH)
         self.agent=agent
         
-        dbus.Bus().add_signal_receiver(self.sQTrack,
-                                       signal_name="qTrack",
-                                       dbus_interface="com.jldupont.musicbrainz.proxy",
-                                       bus_name=None,
-                                       path="/Tracks"
-                                       )            
-
-    @dbus.service.signal(dbus_interface="com.jldupont.musicbrainz.proxy", signature="ssaa{sv}")
-    def Tracks(self, source, ref, list_dic):
+    @dbus.service.signal(dbus_interface="com.jldupont.squeezecenter", signature="ssss")
+    def Track(self, artist, album, title, path):
         pass
-
-    def sQTrack(self, ref, artist_name, track_name, priority):
-        """
-        DBus signal handler - /Tracks/qTrack
-        
-        @param ref: string - an opaque "reference"
-        @param artist_name: string
-        @param track_name:  string
-        @param priority:    string [low|high]
-        
-        @todo: better error handling
-        """
-        try:    artist=str(artist_name)
-        except: artist=None
-        try:    track=str(track_name)
-        except: track=None
-        
-        mswitch.publish(self.agent, "track?", ref, artist, track, priority)
 
 
 class DbusAgent(AgentThreadedBase):
     
     def __init__(self):
-        """
-        @param interval: interval in seconds
-        """
         AgentThreadedBase.__init__(self)
 
-        self.srx=SignalRx(self)
-           
-    def h_tracks(self, source, ref, tracks):
-        """
-        Handler for the 'tracks' message
+        self.srx1=MKSignalRx1(self)
+        self.srx2=MKSignalRx2(self)
         
-        Sends back a message on DBus
-        """
-        ## if the origin was "TrackInfo"
-        if source=="info":
-            return
+        self.stx=TrackSignalTx(self)
         
-        if tracks is None:
-            return
-    
-        result=[]
-        for track in tracks:
-            if track is not None:
-                result.append(self._format(track))
-            
-        self.srx.Tracks(source, ref, result)
-
-    def h_tracksv2(self, source, ref, tracks):
-        """
-        Handler for the 'tracks' message
-        
-        Sends back a message on DBus
-        """
-        if source=="info":
-            return
-        
-        if tracks is None:
-            return
-
-        self.srx.Tracks(source, ref, tracks)
-            
-        
-    def _format(self, track):
-        details={}
-        details["artist_name"]=    str( track.get("artist_name", "") )
-        details["track_name"]=     str( track.get("track_name", "") )
-        details["artist_mbid"]=    str( track.get("artist_mbid", "") )
-        details["track_mbid"]=     str( track.get("track_mbid", "") )
-        details["mb_artist_name"]= str( track.get("mb_artist_name", "") )
-        details["mb_track_name"]=  str( track.get("mb_track_name", "") )
-        return details
-    
-        
-
+    def h_track(self, artist, album, title, path):
+        self.stx.Track(artist, album, title, path)
+                   
 _=DbusAgent()
 _.start()
