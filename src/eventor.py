@@ -6,8 +6,10 @@
     Created on 2010-10-21
     @author: jldupont
 """
+import os
 import sys
 
+PKG_NAME="eventor"
 APP_NAME="Eventor"
 ICON_NAME="eventor.png"
 HELP_URL="http://www.systemical.com/doc/opensource/eventor"
@@ -19,6 +21,12 @@ MSWITCH_DEBUGGING_MODE=False
 MSWITCH_DEBUG_INTEREST=False
 DEV_MODE=True
 ###>>>
+
+if os.environ.get("JLD_DEV"):
+    print "> DEV MODE"
+    this_dir=os.path.dirname(__file__)
+    sys.path.insert(0, os.path.join(this_dir, PKG_NAME))
+
 
 import gobject, dbus.glib, gtk
 from dbus.mainloop.glib import DBusGMainLoop
@@ -41,7 +49,7 @@ from eventor.agents.clock import Clock #@Reimport
 def main(debug=False):
     try:
         
-        from jld_scripts.res import get_res_path
+        from eventor.res import get_res_path
         icon_path=get_res_path()
         
         from eventor.agents.eventor_tray import TrayAgent
@@ -49,7 +57,6 @@ def main(debug=False):
 
         import eventor.agents.adbus #@UnusedImport
 
-        
         _na=NotifierAgent(APP_NAME, ICON_NAME)
         _na.start()
         
@@ -67,4 +74,7 @@ def main(debug=False):
         notify(APP_NAME, "There was an error: %s" % e)
         mswitch.quit()
         sys.exit(1)
+
+if __name__=="__main__":
+    main()
 
