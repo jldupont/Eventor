@@ -4,6 +4,7 @@
 #
 PRJ=eventor
 PKG=eventor
+BASE=/usr/share
 
 PYTHON=`which python`
 
@@ -21,12 +22,26 @@ install:
 	@install -d $(DESTDIR)$/$(PKG)/helpers
 	@install -d $(DESTDIR)$/$(PKG)/system
 	
-	@install -D $(CURDIR)/$(PKG)/*.py                  $(DESTDIR)$/$(PKG)/
-	@install -D $(CURDIR)/$(PKG)/agents/*.py           $(DESTDIR)$/$(PKG)/agents
-	@install -D $(CURDIR)/$(PKG)/helpers/*.py          $(DESTDIR)$/$(PKG)/helpers
-	@install -D $(CURDIR)/$(PKG)/system/*.py           $(DESTDIR)$/$(PKG)/system
+	## REQUIRED FOR CREATING THE .DEB PACKAGE
+	@install -d $(DESTDIR)$(BASE)/applications
+	@install -d $(DESTDIR)$(BASE)/icons
+	@install -d $(DESTDIR)/usr/local/bin
+
 	
-	@python -m compileall ${DESTDIR}$/$(PKG)
+	@install -D $(CURDIR)/$(PKG)/*.py                  $(DESTDIR)$/$(BASE)/$(PKG)/
+	@install -D $(CURDIR)/$(PKG)/agents/*.py           $(DESTDIR)$/$(BASE)/$(PKG)/agents
+	@install -D $(CURDIR)/$(PKG)/helpers/*.py          $(DESTDIR)$/$(BASE)/$(PKG)/helpers
+	@install -D $(CURDIR)/$(PKG)/system/*.py           $(DESTDIR)$/$(BASE)/$(PKG)/system
+	
+
+	@install -D $(CURDIR)/*.desktop           $(DESTDIR)$(BASE)/applications/
+	@install -D $(CURDIR)/*.png               $(DESTDIR)$(BASE)/icons/ 
+
+	## INSTALL BIN
+	@install $(CURDIR)/$(PKG)                 $(DESTDIR)/usr/local/bin/
+	
+	
+	@python -m compileall ${DESTDIR}$/$(PKG)/$(BASE)
 	
 buildsrc:
 	debuild -S
