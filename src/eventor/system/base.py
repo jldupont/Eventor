@@ -267,6 +267,9 @@ class AgentThreadedBase(Thread):
     def doQuit(self):
         self.quit=True
         
+    def loop(self):
+        pass
+        
     def run(self):
         """
         Main Loop
@@ -287,6 +290,7 @@ class AgentThreadedBase(Thread):
             quit=process_queues(self.halting, self, self.agent_name, self.id, 
                                 self.mmap, self.responsesInterest,
                                 self.iq, self.isq, message_processor)
+            self.loop()
         
         self.beforeQuit()
         

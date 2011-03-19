@@ -11,7 +11,7 @@
 import dbus.service
     
 from eventor.system.base import AgentThreadedBase
-#from eventor.system import mswitch
+#pyfrom eventor.system import mswitch
 
 __all__=[]
 
