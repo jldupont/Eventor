@@ -3,8 +3,6 @@ Created on 2011-03-18
 
 @author: jldupont
 '''
-import json
-
 from eventor.system.base import AgentThreadedBase
 from eventor.system.network import MulticastReceiver
 
@@ -22,5 +20,11 @@ class Receiver(AgentThreadedBase):
         
         data=self.mr.get()
         if data is not None:
-            pass
+            self.pub("msg", data)
+            print data
+            
+
+_=Receiver()
+_.start()
+
         

@@ -63,6 +63,8 @@ def main(debug=False):
         clk=Clock(TIME_BASE)
         gobject.timeout_add(TIME_BASE, clk.tick)
         
+        import eventor.agents.receiver  #@UnusedImport
+        
         mswitch.publish("__main__", "debug", debug)
         
         gtk.main()
