@@ -14,7 +14,7 @@ all:
 	@echo "make buildsrc"
 
 clean:
-	@rm -f $(DESTDIR)$(RBP)/$(PKG)/*.pyc
+	@rm -f $(DESTDIR)$(BASE)/$(PKG)/*.pyc
 		
 install:
 	@install -d $(DESTDIR)/$(BASE)/$(PKG)
@@ -34,11 +34,11 @@ install:
 	@install -D $(CURDIR)/$(PKG)/system/*.py           $(DESTDIR)$/$(BASE)/$(PKG)/system
 	
 
-	@install -D $(CURDIR)/*.desktop                    $(DESTDIR)$(BASE)/applications/
-	@install -D $(CURDIR)/$(PKG)/*.png                 $(DESTDIR)$(BASE)/icons/ 
+	@install -D $(CURDIR)/$(PKG)/*.desktop             $(DESTDIR)$(BASE)/applications/
+	@install -D $(CURDIR)/$(PKG)/res/*.png             $(DESTDIR)$(BASE)/icons/ 
 
 	## INSTALL BIN
-	@install $(CURDIR)/$(PKG)                 $(DESTDIR)/usr/local/bin/
+	@install $(CURDIR)/$(PKG)/$(PRJ)                   $(DESTDIR)/usr/local/bin/
 	
 	
 	@python -m compileall ${DESTDIR}$/$(PKG)/$(BASE)
