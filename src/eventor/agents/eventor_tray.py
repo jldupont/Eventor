@@ -14,18 +14,15 @@ import eventor.system.mswitch as mswitch
 
 class AppPopupMenu:
     def __init__(self, app):
-        self.item_sound_only = gtk.CheckMenuItem( "Sound Control Only", True)
         self.item_exit = gtk.MenuItem( "exit", True)
         self.item_show = gtk.MenuItem( "show", True)
         self.item_help = gtk.MenuItem( "help", True)
 
-        self.item_sound_only.connect( 'activate', app.sound_only)
         self.item_show.connect( 'activate', app.show)
         self.item_help.connect( 'activate', app.help)
         self.item_exit.connect( 'activate', app.exit)
         
         self.menu = gtk.Menu()
-        self.menu.append( self.item_sound_only )
         self.menu.append( self.item_show )
         self.menu.append( self.item_help )
         self.menu.append( self.item_exit )        
@@ -70,10 +67,6 @@ class TrayAgent(object):
         
         scaled_buf = AppIcon(icon_path, icon_file).getIconPixBuf()
         self.tray.set_from_pixbuf( scaled_buf )
-        
-    def sound_only(self, widget):
-        state=widget.active
-        mswitch.publish(self, "mode_sound_only", state)
         
     def do_popup_menu_activate(self, statusIcon):
         timestamp=gtk.get_current_event_time()
