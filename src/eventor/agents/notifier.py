@@ -47,7 +47,7 @@ class NotifierAgent(AgentThreadedBase):
     def __init__(self, app_name, icon_name):
         AgentThreadedBase.__init__(self)
         self.app_name=app_name
-        self.icon_name=icon_name
+        self.icon_name="important"
         pynotify.init(app_name)        
 
         self.types=["w", "e", "warning", "error"]
@@ -58,8 +58,10 @@ class NotifierAgent(AgentThreadedBase):
         '''
         n=pynotify.Notification(self.app_name, msg, self.icon_name)
         if urgency is not None:
-            n.set_urgency(self.UMAP.get(urgency, pynotify.URGENCY_NORMAL))
+            urgency=self.UMAP.get(urgency, pynotify.URGENCY_NORMAL)
+            n.set_urgency(urgency)
         n.show()
+        print "* msg: %s - urgency: %s" % (msg, urgency)
         
         
     def h_logged(self, _logtype, loglevel, msg):

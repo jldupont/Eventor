@@ -59,6 +59,9 @@ def main(debug=False):
         _ta=TrayAgent(APP_NAME, icon_path, ICON_NAME, HELP_URL)
 
         import eventor.agents.adbus #@UnusedImport
+        from eventor.agents.call import CallAgent
+        _ca=CallAgent()
+        _ca.start()
 
         _na=NotifierAgent(APP_NAME, ICON_NAME)
         _na.start()

@@ -1,5 +1,5 @@
 """
-    MediaKeys Dbus Agent
+    Eventor Dbus Agent
     
     Created on 2010-10-22
     @author: jldupont
