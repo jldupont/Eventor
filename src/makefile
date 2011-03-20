@@ -25,23 +25,23 @@ install:
 	## REQUIRED FOR CREATING THE .DEB PACKAGE
 	@install -d $(DESTDIR)$(BASE)/applications
 	@install -d $(DESTDIR)$(BASE)/icons
-	@install -d $(DESTDIR)/usr/local/bin
-
+	@install -d $(DESTDIR)/usr/bin
 	
-	@install -D $(CURDIR)/$(PKG)/*.py                  $(DESTDIR)$/$(BASE)/$(PKG)/
-	@install -D $(CURDIR)/$(PKG)/agents/*.py           $(DESTDIR)$/$(BASE)/$(PKG)/agents
-	@install -D $(CURDIR)/$(PKG)/res/*.*               $(DESTDIR)$/$(BASE)/$(PKG)/res
-	@install -D $(CURDIR)/$(PKG)/system/*.py           $(DESTDIR)$/$(BASE)/$(PKG)/system
+	@install -D $(CURDIR)/$(PKG)/*.py                  $(DESTDIR)/$(BASE)/$(PKG)/
+	@install -D $(CURDIR)/$(PKG)/agents/*.py           $(DESTDIR)/$(BASE)/$(PKG)/agents
+	@install -D $(CURDIR)/$(PKG)/res/*.*               $(DESTDIR)/$(BASE)/$(PKG)/res
+	@install -D $(CURDIR)/$(PKG)/system/*.py           $(DESTDIR)/$(BASE)/$(PKG)/system
 	
 
-	@install -D $(CURDIR)/$(PKG)/*.desktop             $(DESTDIR)$(BASE)/applications/
-	@install -D $(CURDIR)/$(PKG)/res/*.png             $(DESTDIR)$(BASE)/icons/ 
+	@install -D $(CURDIR)/*.desktop                    $(DESTDIR)$(BASE)/applications
+	@install -D $(CURDIR)/$(PKG)/res/*.png             $(DESTDIR)$(BASE)/icons 
 
 	## INSTALL BIN
-	@install $(CURDIR)/$(PKG)/$(PRJ)                   $(DESTDIR)/usr/local/bin/
+	@install $(CURDIR)/*.sh                            $(DESTDIR)/usr/bin
+	@install $(CURDIR)/*.py                            $(DESTDIR)/usr/bin
 	
 	
-	@python -m compileall ${DESTDIR}$/$(PKG)/$(BASE)
+	@python -m compileall ${DESTDIR}/$(BASE)/$(PKG)
 	
 buildsrc:
 	debuild -S
