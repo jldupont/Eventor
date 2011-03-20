@@ -3,5 +3,5 @@ Version=1.0
 Type=Application
 Name=Multicast bridge
 Comment=See http://www.systemical.com/doc/opensource/eventor
-Exec=eventor
+Exec=eventor.sh
 Icon=eventor

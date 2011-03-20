@@ -26,6 +26,9 @@ if os.environ.get("JLD_DEV"):
     print "> DEV MODE"
     this_dir=os.path.dirname(__file__)
     sys.path.insert(0, os.path.join(this_dir, PKG_NAME))
+else:
+    ## make sure to synchronize this with makefile
+    sys.path.insert(0, "/usr/share/%s" % PKG_NAME)
 
 
 import gobject, dbus.glib, gtk
