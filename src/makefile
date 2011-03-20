@@ -17,10 +17,10 @@ clean:
 	@rm -f $(DESTDIR)$(RBP)/$(PKG)/*.pyc
 		
 install:
-	@install -d $(DESTDIR)$/$(PKG)
-	@install -d $(DESTDIR)$/$(PKG)/agents
-	@install -d $(DESTDIR)$/$(PKG)/res
-	@install -d $(DESTDIR)$/$(PKG)/system
+	@install -d $(DESTDIR)/$(BASE)/$(PKG)
+	@install -d $(DESTDIR)/$(BASE)/$(PKG)/agents
+	@install -d $(DESTDIR)/$(BASE)/$(PKG)/res
+	@install -d $(DESTDIR)/$(BASE)/$(PKG)/system
 	
 	## REQUIRED FOR CREATING THE .DEB PACKAGE
 	@install -d $(DESTDIR)$(BASE)/applications
