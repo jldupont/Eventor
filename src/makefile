@@ -5,6 +5,7 @@
 PRJ=eventor
 PKG=eventor
 BASE=/usr/share/eventor
+APP_BASE=/usr/share
 
 PYTHON=`which python`
 
@@ -23,8 +24,8 @@ install:
 	@install -d $(DESTDIR)/$(BASE)/$(PKG)/system
 	
 	## REQUIRED FOR CREATING THE .DEB PACKAGE
-	@install -d $(DESTDIR)$(BASE)/applications
-	@install -d $(DESTDIR)$(BASE)/icons
+	@install -d $(DESTDIR)$(APP_BASE)/applications
+	@install -d $(DESTDIR)$(APP_BASE)/icons
 	@install -d $(DESTDIR)/usr/bin
 	
 	@install -D $(CURDIR)/$(PKG)/*.py                  $(DESTDIR)/$(BASE)/$(PKG)/
@@ -33,8 +34,8 @@ install:
 	@install -D $(CURDIR)/$(PKG)/system/*.py           $(DESTDIR)/$(BASE)/$(PKG)/system
 	
 
-	@install -D $(CURDIR)/*.desktop                    $(DESTDIR)$(BASE)/../applications
-	@install -D $(CURDIR)/$(PKG)/res/*.png             $(DESTDIR)$(BASE)/../icons 
+	@install -D $(CURDIR)/*.desktop                    $(DESTDIR)$(APP_BASE)/applications
+	@install -D $(CURDIR)/$(PKG)/res/*.png             $(DESTDIR)$(APP_BASE)/icons 
 
 	## INSTALL BIN
 	@install $(CURDIR)/*.sh                            $(DESTDIR)/usr/bin
