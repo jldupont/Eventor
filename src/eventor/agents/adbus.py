@@ -1,12 +1,15 @@
 """
     MediaKeys Dbus Agent
     
-    Messages Generated:
-    - "mk_key_press" (key, source, priority)
-        priority: 1 -> low, 5 -> high
-    
     Created on 2010-10-22
     @author: jldupont
+    
+    e.g.
+    signal sender=:1.122 -> dest=(null destination) serial=2 
+    path=/Events; 
+    interface=com.systemical.eventor; member=Msg
+       string "{"type":"incomingCall","state":"RINGING","from_number":"15146750877","phone":"15145545655"}"
+   
 """
 import dbus.service
     
@@ -18,7 +21,7 @@ __all__=[]
 
 class SignalTx(dbus.service.Object):
 
-    PATH="/Track"
+    PATH="/Events"
     
     def __init__(self, agent):
         dbus.service.Object.__init__(self, dbus.SystemBus(), self.PATH)
@@ -37,7 +40,7 @@ class DbusAgent(AgentThreadedBase):
         self.stx=SignalTx(self)
         
     def h_mmsg(self, msg):
-        self.stx.Track(msg)
+        self.stx.Msg(msg)
                    
 _=DbusAgent()
 _.start()

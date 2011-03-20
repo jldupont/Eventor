@@ -15,15 +15,12 @@ import eventor.system.mswitch as mswitch
 class AppPopupMenu:
     def __init__(self, app):
         self.item_exit = gtk.MenuItem( "exit", True)
-        self.item_show = gtk.MenuItem( "show", True)
         self.item_help = gtk.MenuItem( "help", True)
 
-        self.item_show.connect( 'activate', app.show)
         self.item_help.connect( 'activate', app.help)
         self.item_exit.connect( 'activate', app.exit)
         
         self.menu = gtk.Menu()
-        self.menu.append( self.item_show )
         self.menu.append( self.item_help )
         self.menu.append( self.item_exit )        
         self.menu.show_all()

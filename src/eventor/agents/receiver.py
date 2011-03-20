@@ -10,6 +10,7 @@ class Receiver(AgentThreadedBase):
     
     GROUP = "239.0.0.1"
     PORT  = 6666
+    COUNT = 10
     
     def __init__(self):
         AgentThreadedBase.__init__(self)
@@ -17,12 +18,14 @@ class Receiver(AgentThreadedBase):
         self.mr=MulticastReceiver(self.GROUP, self.PORT)
         
     def loop(self):
+        count=self.COUNT
         
         data=self.mr.get()
-        if data is not None:
-            self.pub("msg", data)
-            print data
-            
+        while data and count>0:
+            self.pub("mmsg", data)
+            data=self.mr.get()
+            count=count-1
+
 
 _=Receiver()
 _.start()
