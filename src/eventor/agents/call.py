@@ -18,13 +18,30 @@ class CallAgent(AgentThreadedBase):
         try:    info=json.loads(msg)
         except: info=None
         
-        state=info.get("state", None)
         type=info.get("type", None)
-        if type is None or state is None:
+        if type is None:
+            return
+
+        handler=getattr(self, "h_%s" % type, None)
+        if handler is None:
             return
         
+        handler(self, info)
+        
+
+    def h_incomingcall(self, info):
+        """
+        Handler for type: incomingCall
+        """
+        state=info.get("state", None)
         number=info.get("from_number", None)
-        if type.lower()=="incomingcall":
-            if state.lower()=="ringing":
-                self.pub("notify", "Incoming call from: %s" % number, "high")
+        if state.lower()=="ringing":
+            self.pub("notify", "Incoming call from: %s" % number, "high")
+        
+    def h_sms(self, info):
+        """
+        Handler for type: "sms"
+        """
+        number=info.get("from_number", None)
+        self.pub("notify", "SMS from: %s" % number, "high")
         
