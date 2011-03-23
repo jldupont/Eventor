@@ -29,3 +29,5 @@ History
 0.1 : initial release
 
 1.0 : added desktop notification for event "incomingCall"
+
+1.1 : added "incoming sms" notification
