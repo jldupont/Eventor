@@ -30,3 +30,21 @@ class MulticastReceiver(object):
             data=s.recv(8192)
             
         return data
+
+
+class MulticastTransmitter(object):
+    
+    def __init__(self, group, port):
+        self.port=port
+        self.group=group
+
+        self.socket=socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+        self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.socket.bind(('', port))
+        
+        mreq = struct.pack("4sl", socket.inet_aton(group), socket.INADDR_ANY)
+        self.socket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, mreq)
+
+    def send(self, packet):
+        self.socket.send(packet)
+    

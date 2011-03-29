@@ -16,7 +16,8 @@ class CallAgent(AgentThreadedBase):
         """ msg is JSON encoded
         """
         try:    info=json.loads(msg)
-        except: info=None
+        except:
+            return
         
         type=info.get("type", None)
         if type is None:
