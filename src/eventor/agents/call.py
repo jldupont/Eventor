@@ -27,7 +27,7 @@ class CallAgent(AgentThreadedBase):
         if handler is None:
             return
         
-        handler(self, info)
+        handler(info)
         
 
     def h_incomingcall(self, info):
