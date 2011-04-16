@@ -3,6 +3,7 @@ Created on 2011-03-18
 
 @author: jldupont
 '''
+import os
 import socket
 import struct
 import select
@@ -47,4 +48,29 @@ class MulticastTransmitter(object):
 
     def send(self, packet):
         self.socket.send(packet)
+    
+def get_ip():
+    addresses=[]
+    try:
+        file=os.popen("ifconfig | grep 'addr:'")
+        data=file.read()
+        file.close()
+        bits=data.strip().split('\n')
+
+        for bit in bits:
+            if bit.strip().startswith("inet "):
+                other_bits=bit.replace(':', ' ').strip().split(' ')
+                for obit in other_bits:
+                    if (obit.count('.')==3):
+                        if not obit.startswith("127."):
+                            addresses.append(obit)
+                        break
+    except:
+        pass
+    return addresses
+            
+    
+if __name__=="__main__":
+    print get_ip()
+    
     

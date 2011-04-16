@@ -70,6 +70,7 @@ def main(debug=False):
         gobject.timeout_add(TIME_BASE, clk.tick)
         
         import eventor.agents.receiver  #@UnusedImport
+        import eventor.agents.ipreg     #@UnusedImport
         
         mswitch.publish("__main__", "debug", debug)
         
